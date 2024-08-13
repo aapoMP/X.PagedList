@@ -130,6 +130,9 @@ public static class PagedListExtensions
     /// The one-based index of the subset of objects to be contained by this instance.
     /// </param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <returns>A subset of this collection of objects that can be individually accessed by index and containing
     /// metadata about the collection of objects the subset was created from.</returns>
     /// <seealso cref="PagedList{T}"/>
@@ -155,6 +158,9 @@ public static class PagedListExtensions
     /// <param name="pageNumber">The one-based index of the subset of objects to be contained by this instance.</param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
     /// <param name="totalSetCount">The total size of set</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <returns>
     /// A subset of this collection of objects that can be individually accessed by index and containing metadata
     /// about the collection of objects the subset was created from.
@@ -182,6 +188,9 @@ public static class PagedListExtensions
     /// <param name="keySelector">Expression for Order</param>
     /// <param name="pageNumber">The one-based index of the subset of objects to be contained by this instance.</param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <returns>
     /// A subset of this collection of objects that can be individually accessed by index and containing metadata
     /// about the collection of objects the subset was created from.
@@ -210,6 +219,9 @@ public static class PagedListExtensions
     /// </param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
     /// <param name="totalSetCount">The total size of set</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <returns>A subset of this collection of objects that can be individually accessed by index and containing
     /// metadata about the collection of objects the subset was created from.</returns>
     /// <seealso cref="PagedList{T}"/>
@@ -236,12 +248,23 @@ public static class PagedListExtensions
 
         if (totalCount > 0)
         {
+            int pageCount = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            // Limit page number to page count
+            if (pageNumber > pageCount)
+            {
+                pageNumber = pageCount;
+            }
+
             var skip = (pageNumber - 1) * pageSize;
 
             subset = superset.Skip(skip).Take(pageSize).ToList();
         }
         else
         {
+            // No items, show first (empty) page
+            pageNumber = 1;
+
             subset = new List<T>();
         }
 
@@ -263,6 +286,9 @@ public static class PagedListExtensions
     /// The one-based index of the subset of objects to be contained by this instance.
     /// </param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <returns>
     /// A subset of this collection of objects that can be individually accessed by index and containing
     /// metadata about the collection of objects the subset was created from.

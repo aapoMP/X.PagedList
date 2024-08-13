@@ -92,7 +92,7 @@ public class PagedListFacts
     }
 
     [Fact]
-    public void PageNumber_Above_RecordCount_Returns_Empty_List()
+    public void PageNumber_Above_RecordCount_Returns_Last_Page()
     {
         //arrange
         var data = new[] { 1, 2, 3 };
@@ -101,7 +101,8 @@ public class PagedListFacts
         var pagedList = data.ToPagedList(2, 3);
 
         //assert
-        Assert.Empty(pagedList);
+        Assert.NotEmpty(pagedList);
+        Assert.True(pagedList.IsLastPage);
     }
 
     [Fact]
@@ -254,7 +255,7 @@ public class PagedListFacts
         //assert
         Assert.False(pagedList1.IsLastPage);
         Assert.True(pagedList2.IsLastPage);
-        Assert.False(pagedList3.IsLastPage);
+        Assert.True(pagedList3.IsLastPage);
     }
 
     [Fact]

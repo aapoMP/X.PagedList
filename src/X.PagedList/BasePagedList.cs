@@ -37,6 +37,9 @@ public abstract class BasePagedList<T> : PagedListMetaData, IPagedList<T>
     /// <param name = "pageNumber">The one-based index of the subset of objects contained by this instance.</param>
     /// <param name = "pageSize">The maximum size of any individual subset.</param>
     /// <param name = "totalItemCount">The size of the superset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     protected internal BasePagedList(int pageNumber, int pageSize, int totalItemCount)
     {
         if (pageNumber < 1)
@@ -57,28 +60,37 @@ public abstract class BasePagedList<T> : PagedListMetaData, IPagedList<T>
         // set source to blank list if superset is null to prevent exceptions
         TotalItemCount = totalItemCount;
         PageSize = pageSize;
-        PageNumber = pageNumber;
 
-        PageCount = TotalItemCount > 0
-            ? (int)Math.Ceiling(TotalItemCount / (double)PageSize)
-            : 0;
+        bool isEmptySet = TotalItemCount == 0;
 
-        bool pageNumberIsGood = PageCount > 0 && PageNumber <= PageCount;
+        if (isEmptySet)
+        {
+            // No items, show first (empty) page
+            PageNumber = 1;
+            PageCount = 0;
 
-        HasPreviousPage = pageNumberIsGood && PageNumber > 1;
-        HasNextPage = pageNumberIsGood && PageNumber < PageCount;
-        IsFirstPage = pageNumberIsGood && PageNumber == 1;
-        IsLastPage = pageNumberIsGood && PageNumber == PageCount;
+            IsFirstPage = true;
+            IsLastPage = true;
 
-        int numberOfFirstItemOnPage = (PageNumber - 1) * PageSize + 1;
+            FirstItemOnPage = 0;
+            LastItemOnPage = 0;
+        }
+        else
+        {
+            PageCount = (int)Math.Ceiling(TotalItemCount / (double)PageSize);
 
-        FirstItemOnPage = pageNumberIsGood ? numberOfFirstItemOnPage : 0;
+            // Limit page number to page count
+            PageNumber = Math.Min(pageNumber, PageCount);
 
-        int numberOfLastItemOnPage = numberOfFirstItemOnPage + PageSize - 1;
+            IsFirstPage = PageNumber == 1;
+            IsLastPage = PageNumber == PageCount;
 
-        LastItemOnPage = pageNumberIsGood
-            ? numberOfLastItemOnPage > TotalItemCount ? TotalItemCount : numberOfLastItemOnPage
-            : 0;
+            FirstItemOnPage = (PageNumber - 1) * PageSize + 1;
+            LastItemOnPage = Math.Min(FirstItemOnPage + PageSize - 1, TotalItemCount);
+        }
+
+        HasPreviousPage = PageNumber > 1;
+        HasNextPage = PageNumber < PageCount;
     }
 
     /// <summary>

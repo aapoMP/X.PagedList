@@ -29,6 +29,9 @@ public class PagedList<T> : BasePagedList<T>
     /// The one-based index of the subset of objects to be contained by this instance.
     /// </param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException">The specified index cannot be less than zero.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The specified page size cannot be less than one.</exception>
@@ -44,9 +47,9 @@ public class PagedList<T> : BasePagedList<T>
         // add items to internal list
         if (TotalItemCount > 0)
         {
-            var skip = (pageNumber - 1) * pageSize;
+            var skip = (PageNumber - 1) * PageSize;
 
-            Subset = superset.Skip(skip).Take(pageSize).ToList();
+            Subset = superset.Skip(skip).Take(PageSize).ToList();
         }
     }
 
@@ -61,6 +64,9 @@ public class PagedList<T> : BasePagedList<T>
     /// </param>
     /// <param name="pageNumber">The one-based index of the subset of objects to be contained by this instance.</param>
     /// <param name="pageSize">The maximum size of any individual subset.</param>
+    /// <remarks>
+    /// If <paramref name="pageNumber"/> exceeds the total page count, it is limited to the last page.
+    /// </remarks>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentOutOfRangeException">The specified index cannot be less than zero.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The specified page size cannot be less than one.</exception>

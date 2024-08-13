@@ -46,7 +46,7 @@ public class PagedListMetaData : IPagedList
     public int TotalItemCount { get; protected set; }
 
     /// <summary>
-    /// One-based index of this subset within the superset, zero if the superset is empty.
+    /// One-based index of this subset within the superset.
     /// </summary>
     public int PageNumber { get; protected set; }
 

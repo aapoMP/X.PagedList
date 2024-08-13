@@ -38,7 +38,7 @@ public interface IPagedList
     int TotalItemCount { get; }
 
     /// <summary>
-    /// One-based index of this subset within the superset, zero if the superset is empty.
+    /// One-based index of this subset within the superset.
     /// </summary>
     int PageNumber { get; }
 

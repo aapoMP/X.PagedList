@@ -9,7 +9,7 @@ public class StaticPagedListFacts
      InlineData(1, true, false),
      InlineData(2, false, false),
      InlineData(3, false, true),
-     InlineData(4, false, false)]
+     InlineData(4, false, true)]
     public void StaticPagedList_uses_supplied_totalItemCount_to_determine_subsets_position_within_superset(int pageNumber, bool shouldBeFirstPage, bool shouldBeLastPage)
     {
         //arrange
@@ -19,7 +19,7 @@ public class StaticPagedListFacts
         var list = new StaticPagedList<int>(subset, pageNumber, 3, 9);
 
         //assert
-        Assert.Equal(pageNumber, list.PageNumber);
+        Assert.Equal(Math.Min(pageNumber, list.PageCount), list.PageNumber);
         Assert.Equal(shouldBeFirstPage, list.IsFirstPage);
         Assert.Equal(shouldBeLastPage, list.IsLastPage);
     }

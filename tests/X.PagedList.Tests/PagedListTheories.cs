@@ -93,8 +93,8 @@ public class PagedListTheories
     [InlineData(new[] { 1, 2, 3 }, 2, 1, false, false)]
     [InlineData(new[] { 1, 2, 3 }, 3, 1, false, true)]
     [InlineData(new[] { 1, 2, 3 }, 1, 3, true, true)] // Page 1 of 1
-    [InlineData(new[] { 1, 2, 3 }, 2, 3, false, false)] // Page 2 of 1
-    [InlineData(new int[] { }, 1, 3, false, false)] // Page 1 of 0
+    [InlineData(new[] { 1, 2, 3 }, 2, 3, true, true)] // Page 2 of 1
+    [InlineData(new int[] { }, 1, 3, true, true)] // Page 1 of 0
     public void Theory_IsFirstPage_And_IsLastPage_Are_Correct(int[] integers, int pageNumber, int pageSize,
         bool expectedIsFirstPage, bool expectedIsLastPage)
     {
@@ -134,7 +134,7 @@ public class PagedListTheories
     [InlineData(new[] { 1, 2, 3, 4, 5 }, 1, 2, 1, 2)]
     [InlineData(new[] { 1, 2, 3, 4, 5 }, 2, 2, 3, 4)]
     [InlineData(new[] { 1, 2, 3, 4, 5 }, 3, 2, 5, 5)]
-    [InlineData(new[] { 1, 2, 3, 4, 5 }, 4, 2, 0, 0)]
+    [InlineData(new[] { 1, 2, 3, 4, 5 }, 4, 2, 5, 5)]
     [InlineData(new int[] { }, 1, 2, 0, 0)]
     public void Theory_FirstItemOnPage_And_LastItemOnPage_Are_Correct(int[] integers, int pageNumber, int pageSize, int expectedFirstItemOnPage, int expectedLastItemOnPage)
     {
